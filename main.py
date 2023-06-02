@@ -3,14 +3,14 @@ import os
 from pytube import YouTube
 from moviepy.editor import VideoFileClip
 import telebot
-import token
+import token_bot
 
-bot = telebot.TeleBot(token.bot_token)
+bot = telebot.TeleBot(token_bot.bot_token)
 chat_id = '-1001989493249'
 
 
 def handle_message(message):
-    if message.text.startswith('https://www.youtube.com'):
+    if message.text.startswith('https://www.youtube.com/watch'):
         print(message)
         video_url = message.text
         # Создаем объект YouTube
@@ -41,20 +41,31 @@ def handle_message(message):
         video_clip.close()
         os.remove(video_path)
         os.remove(audio_path)
+    else:
+        bot.send_message(chat_id, "Скачать трек могу только по ссылке, которая начинается с https\\:\\/\\/www\\.\\["
+                                  "youtube\\]\\.com\\/watch?v\\=", parse_mode='MarkdownV2')
 
 
 def start():
+    global update
+    last_update_id = 0  # Идентификатор последнего обновления
+
     while True:
         try:
-            # Получаем обновления о новых сообщениях
-            updates = bot.get_updates()
+            # Получаем обновления о новых сообщениях, начиная с последнего обновления + 1
+            updates = bot.get_updates(offset=last_update_id + 1)
 
             # Перебираем полученные обновления
             for update in updates:
                 if update.message is not None:
                     handle_message(update.message)
+
+                    # Обновляем значение последнего обновления
+                    last_update_id = update.update_id
+
         except Exception as e:
             print(e)
+            last_update_id = update.update_id
             # При возникновении ошибки продолжаем выполнение цикла
             continue
 
