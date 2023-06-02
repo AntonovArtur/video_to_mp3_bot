@@ -9,7 +9,34 @@ bot = telebot.TeleBot(token_bot.bot_token)
 chat_id = '-1001989493249'
 
 
+def download_and_convert_mp3(video):
+    video_title = video.title + ".mp4"
+
+    # Скачиваем видео
+    video_path_dir = '/Users/a1/Desktop/video_to_mp3_bot_tmp/'
+    video_path = f'{video_path_dir}{video_title}'
+    video.download(output_path=video_path_dir, filename=video_title)
+
+    # Задаем путь для сохранения аудио файла с тем же названием
+    audio_path = f'{video_path_dir}{video_title}.mp3'
+
+    # Конвертируем видео в аудио формат
+    video_clip = VideoFileClip(video_path)
+    video_clip.audio.write_audiofile(audio_path, codec='mp3')
+
+    # Отправляем аудио-файл через Telegram бота
+
+    audio_file = open(audio_path, 'rb')
+    bot.send_audio(chat_id=chat_id, audio=audio_file)
+
+    # Удаляем скачанное видео и аудио
+    video_clip.close()
+    os.remove(video_path)
+    os.remove(audio_path)
+
+
 def handle_message(message):
+    print(message.author_signature)
     if message.text.startswith('https://www.youtube.com/watch'):
         print(message)
         video_url = message.text
@@ -18,30 +45,14 @@ def handle_message(message):
 
         # Выбираем видео в формате mp4 с наилучшим качеством
         video = yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first()
-        video_title = video.title + ".mp4"
-
-        # Скачиваем видео
-        video_path_dir = '/Users/a1/Desktop/video_to_mp3_bot_tmp/'
-        video_path = f'{video_path_dir}{video_title}'
-        video.download(output_path=video_path_dir, filename=video_title)
-
-        # Задаем путь для сохранения аудио файла с тем же названием
-        audio_path = f'{video_path_dir}{video_title}.mp3'
-
-        # Конвертируем видео в аудио формат
-        video_clip = VideoFileClip(video_path)
-        video_clip.audio.write_audiofile(audio_path, codec='mp3')
-
-        # Отправляем аудио-файл через Telegram бота
-
-        audio_file = open(audio_path, 'rb')
-        bot.send_audio(chat_id=chat_id, audio=audio_file)
-
-        # Удаляем скачанное видео и аудио
-        video_clip.close()
-        os.remove(video_path)
-        os.remove(audio_path)
-    else:
+        download_and_convert_mp3(video)
+    elif message.text.startswith('https://youtu.be'):
+        video_url = message.text
+        yt = YouTube(video_url)
+        # выбираем видео в формате mp4 с наилучшим качеством
+        video = yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first()
+        download_and_convert_mp3(video)
+    elif message.text.startswith('http'):
         bot.send_message(chat_id, "Скачать трек могу только по ссылке, которая начинается с https\\:\\/\\/www\\.\\["
                                   "youtube\\]\\.com\\/watch?v\\=", parse_mode='MarkdownV2')
 
