@@ -10,12 +10,16 @@ chat_id = '-1001989493249'
 
 
 def download_and_convert_mp3(video):
+    print("download_and_convert_mp3")
     video_title = video.title + ".mp4"
 
-    # Скачиваем видео
-    video_path_dir = '/Users/a1/Desktop/video_to_mp3_bot_tmp/'
-    video_path = f'{video_path_dir}{video_title}'
-    video.download(output_path=video_path_dir, filename=video_title)
+    try:
+        # Скачиваем видео
+        video_path_dir = '/Users/a1/Desktop/video_to_mp3_bot_tmp/'
+        video_path = f'{video_path_dir}{video_title}'
+        video.download(output_path=video_path_dir, filename=video_title)
+    except Exception as e:
+        bot.send_message(chat_id, f"Произошла ошибка при скачивании видео")
 
     # Задаем путь для сохранения аудио файла с тем же названием
     audio_path = f'{video_path_dir}{video_title}.mp3'
@@ -36,17 +40,26 @@ def download_and_convert_mp3(video):
 
 
 def handle_message(message):
-    print(message.author_signature)
-    if message.text.startswith('https://www.youtube.com/watch'):
-        print(message)
-        video_url = message.text
-        # Создаем объект YouTube
-        yt = YouTube(video_url)
+    bot.send_message(chat_id, message.from_user.id)
+    if message.from_user.id == 1063715692:
+        bot.send_message(chat_id, "Да здравствует мой господин!")
+    elif message.from_user.id == 1386813746:
+        bot.send_message(chat_id, "Макс, заебал. сделай своего бота")
+    elif message.from_user.id == 597741205:
+        bot.send_message(chat_id, "Карина, ты прекрасна как всегда!")
 
+    else:
+        bot.send_message(chat_id, "Кто ты, странник??")
+
+    if message.text.startswith('https://www.youtube.com/watch'):
+        video_url = message.text
+        yt = YouTube(video_url)
         # Выбираем видео в формате mp4 с наилучшим качеством
         video = yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first()
         download_and_convert_mp3(video)
+
     elif message.text.startswith('https://youtu.be'):
+        print(message)
         video_url = message.text
         yt = YouTube(video_url)
         # выбираем видео в формате mp4 с наилучшим качеством
@@ -81,4 +94,5 @@ def start():
             continue
 
 
+# bot.polling()
 start()
