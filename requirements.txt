@@ -1,0 +1,5 @@
+Flask==2.3.2
+psycopg2-binary==2.9.6
+telebot~=0.0.5
+pytube~=15.0.0
+moviepy

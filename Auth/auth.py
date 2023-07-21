@@ -5,7 +5,7 @@ import token_bot
 def auth(bot, message):
     bot.send_message(message.chat.id, message.from_user.id)
     if message.from_user.id == 1063715692:
-        bot.send_message(message.chat.id, "Да здравствует мой господин!")
+        bot.send_message(message.chat.id, "Да здравствует мой господин!!")
         return True
     elif message.from_user.id == 1386813746:
         bot.send_message(message.chat.id, "Макс, заебал. сделай своего бота")
