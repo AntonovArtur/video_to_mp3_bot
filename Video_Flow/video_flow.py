@@ -34,11 +34,32 @@ def download_and_convert_mp3(bot, message):
     audio_path = f'{video_path_dir}/{video_title}.mp3'
     video_clip = VideoFileClip(video_path)
     video_clip.audio.write_audiofile(audio_path, codec='mp3')
+    video_clip.close()
 
-    audio_file = open(audio_path, 'rb')
-    bot.send_audio(chat_id=message.chat.id, audio=audio_file)
+    max_audio_size = 45 * 1024 * 1024  # 45 МБ в байтах
+    audio_parts = []
+    index = 1
+
+    # Разбиваем аудиофайл на части не более 45 МБ
+    with open(audio_path, 'rb') as audio_file:
+        part = audio_file.read(max_audio_size)
+        while part:
+            part_name = f'{index}+{video_title}.mp3'
+            part_path = os.path.join(video_path_dir, part_name)
+            with open(part_path, 'wb') as part_file:
+                part_file.write(part)
+            audio_parts.append(part_path)
+            part = audio_file.read(max_audio_size)
+            index += 1
+
+    # Отправляем части аудио в виде аудио-сообщений с префиксом
+    for i, part_path in enumerate(audio_parts, start=1):
+        with open(part_path, 'rb') as part_file:
+            part_name = os.path.basename(part_path)
+            bot.send_audio(chat_id=message.chat.id, audio=part_file, title=f"Часть {i}/{len(audio_parts)} - {part_name}")
 
     # Удаляем скачанное видео и аудио
-    video_clip.close()
     os.remove(video_path)
+    for part_path in audio_parts:
+        os.remove(part_path)
     os.remove(audio_path)

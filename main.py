@@ -4,7 +4,7 @@ from Auth.auth import auth
 from Video_Flow.video_flow import video_flow
 
 bot = telebot.TeleBot(token_bot.bot_token)
-chat_id = '-1001989493249'
+# chat_id = '-1001989493249'
 
 
 def handle_message(message):
