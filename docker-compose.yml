@@ -5,13 +5,13 @@ services:
     image: postgres
     restart: always
     ports:
-      - '5433:5433'
+      - '5555:5555'
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: postgres
-    volumes:
-      - ./data:/var/lib/postgresql/data
+#    volumes:
+#      - ./data:/var/lib/postgresql/data
 
   app:
     build: .

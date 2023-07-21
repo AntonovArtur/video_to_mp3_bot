@@ -16,7 +16,7 @@ def create_user():
     data = request.get_json()
     name = data['name']
     team_name = data['team_name']
-    mustache_count = data['mustache_count']
+    isActive = data['isActive']
     telegram_id = data['telegram_id']
     balance = data['balance']
 
@@ -28,11 +28,11 @@ def create_user():
         return jsonify({'message': 'User with this telegram_id already exists'}), 400
 
     query = '''
-    INSERT INTO users (name, team_name, mustache_count, telegram_id, balance)
+    INSERT INTO users (name, team_name, isActive, telegram_id, balance)
     VALUES (%s, %s, %s, %s, %s)
     RETURNING id;
     '''
-    params = (name, team_name, mustache_count, telegram_id, balance)
+    params = (name, team_name, isActive, telegram_id, balance)
     result = execute_query(query, params)
     new_user_id = result[0][0]
 
@@ -40,7 +40,7 @@ def create_user():
         'id': new_user_id,
         'name': name,
         'team_name': team_name,
-        'mustache_count': mustache_count,
+        'isActive': isActive,
         'telegram_id': telegram_id,
         'balance': balance
     }
@@ -58,7 +58,7 @@ def get_users():
             'id': row[0],
             'name': row[1],
             'team_name': row[2],
-            'mustache_count': row[3],
+            'isActive': row[3],
             'telegram_id': row[4],
             'balance': float(row[5])
         }
@@ -80,7 +80,7 @@ def get_user_by_telegram_id(telegram_id):
         'id': result[0][0],
         'name': result[0][1],
         'team_name': result[0][2],
-        'mustache_count': result[0][3],
+        'isActive': result[0][3],
         'telegram_id': result[0][4],
         'balance': float(result[0][5])
     }
@@ -93,23 +93,23 @@ def update_user(user_id):
     data = request.get_json()
     name = data['name']
     team_name = data['team_name']
-    mustache_count = data['mustache_count']
+    isActive = data['isActive']
     telegram_id = data['telegram_id']
     balance = data['balance']
 
     query = '''
     UPDATE users
-    SET name = %s, team_name = %s, mustache_count = %s, telegram_id = %s, balance = %s
+    SET name = %s, team_name = %s, isActive = %s, telegram_id = %s, balance = %s
     WHERE telegram_id = %s;
     '''
-    params = (name, team_name, mustache_count, telegram_id, balance, user_id)
+    params = (name, team_name, isActive, telegram_id, balance, user_id)
     execute_query(query, params)
 
     response = {
         'id': user_id,
         'name': name,
         'team_name': team_name,
-        'mustache_count': mustache_count,
+        'isActive': isActive,
         'telegram_id': telegram_id,
         'balance': balance
     }

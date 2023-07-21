@@ -7,7 +7,7 @@ def connect():
         user='postgres',
         password='password',
         host='db',
-        port='5433',
+        port='5432',
         database='postgres'
     )
     return connection
