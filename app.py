@@ -58,9 +58,9 @@ def get_users():
             'id': row[0],
             'name': row[1],
             'team_name': row[2],
-            'isActive': row[3],
-            'telegram_id': row[4],
-            'balance': float(row[5])
+            'telegram_id': row[3],
+            'balance': float(row[4]),
+            'isActive': row[5]
         }
         users.append(user)
     return jsonify(users)
@@ -80,9 +80,9 @@ def get_user_by_telegram_id(telegram_id):
         'id': result[0][0],
         'name': result[0][1],
         'team_name': result[0][2],
-        'isActive': result[0][3],
-        'telegram_id': result[0][4],
-        'balance': float(result[0][5])
+        'telegram_id': result[0][3],
+        'balance': float(result[0][4]),
+        'isActive': result[0][5]
     }
     return jsonify(user)
 
@@ -98,15 +98,16 @@ def update_user(user_id):
     balance = data['balance']
 
     query = '''
-    UPDATE users
-    SET name = %s, team_name = %s, isActive = %s, telegram_id = %s, balance = %s
-    WHERE telegram_id = %s;
-    '''
+        UPDATE users
+        SET name = %s, team_name = %s, isActive = %s, telegram_id = %s, balance = %s
+        WHERE telegram_id = %s
+        RETURNING id; -- Возвращаем обновленное значение поля id
+        '''
     params = (name, team_name, isActive, telegram_id, balance, user_id)
-    execute_query(query, params)
+    result = execute_query(query, params)
 
     response = {
-        'id': user_id,
+        'id': result[0][0],  # Возвращаем обновленное значение id
         'name': name,
         'team_name': team_name,
         'isActive': isActive,
@@ -119,7 +120,7 @@ def update_user(user_id):
 # Маршрут для удаления пользователя (метод DELETE)
 @app.route('/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
-    query = 'DELETE FROM users WHERE id = %s;'
+    query = 'DELETE FROM users WHERE telegram_id = %s;'
     params = (user_id,)
     execute_query(query, params)
 
@@ -137,6 +138,18 @@ def set_balance(telegram_id):
     execute_query(query, params)
 
     return jsonify({'message': 'Balance updated successfully'})
+
+
+@app.route('/users/<int:telegram_id>/is_active', methods=['PUT'])
+def user_activation(telegram_id):
+    data = request.get_json()
+    balance = data['isActive']
+
+    query = 'UPDATE users SET isActive = %s WHERE telegram_id = %s;'
+    params = (balance, telegram_id)
+    execute_query(query, params)
+
+    return jsonify({'message': 'Activation is updated successfully'})
 
 
 if __name__ == '__main__':

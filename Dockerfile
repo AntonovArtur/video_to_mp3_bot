@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Запускаем supervisord, который запустит оба приложения (app.py и main.py)
-#CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+# CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 
 CMD ["python", "app.py"]
 #CMD ["python", "main.py"]

@@ -14,7 +14,7 @@ def connect():
 
 
 # Функция для выполнения запросов к базе данных
-def execute_query(query, params=None):
+def execute_query(query, params=None, fetch_one=False):
     connection = None
     cursor = None
     try:

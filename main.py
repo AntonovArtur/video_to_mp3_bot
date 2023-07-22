@@ -1,17 +1,34 @@
+import os
+import uuid
+
 import telebot
 import token_bot
 from Auth.auth import auth
+from Features.speach_to_text import speech_to_text_from_file
 from Video_Flow.video_flow import video_flow
 
 bot = telebot.TeleBot(token_bot.bot_token)
+
+
 # chat_id = '-1001989493249'
+@bot.message_handler(content_types=['voice'])
+def handle_voice_message(message):
+    bot.send_message(message.chat.id, "voice message")
+
+
+    # Вызываем функцию для распознавания речи из файла
+    recognized_text = speech_to_text_from_file(bot, message)
+
+    # Отправляем пользователю распознанный текст
+    bot.send_message(message.chat.id, f"Распознанный текст: {recognized_text}")
 
 
 def handle_message(message):
+    bot.send_message(message.chat.id, message)
     if auth(bot, message):
         video_flow(bot, message)
     else:
-        bot.send_message(message.chat.id, "Register first")
+        bot.send_message(message.chat.id, "Ваш аккаунт не активарован. Обратитесь в поддержку")
 
 
 def start():
@@ -25,11 +42,14 @@ def start():
 
             # Перебираем полученные обновления
             for update in updates:
+                last_update_id = update.update_id
                 if update.message is not None:
-                    handle_message(update.message)
+                    if "voice" in update.message.content_type:
+                        handle_voice_message(update.message)
 
-                    # Обновляем значение последнего обновления
-                    last_update_id = update.update_id
+                    continue
+                handle_message(update.message)
+                # Обновляем значение последнего обновления
 
         except Exception as e:
             print(e)
