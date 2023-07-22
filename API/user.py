@@ -1,6 +1,7 @@
 import requests
 
-base_url = 'http://localhost:8009'  # Укажите URL вашего API
+# base_url = 'http://localhost:8009'  # Укажите URL вашего API
+base_url = 'http://194.87.145.137:8009'  # Укажите URL вашего API
 
 
 def create_user(name, team_name, telegram_id, balance, is_active):

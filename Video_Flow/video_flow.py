@@ -56,7 +56,11 @@ def download_and_convert_mp3(bot, message):
     for i, part_path in enumerate(audio_parts, start=1):
         with open(part_path, 'rb') as part_file:
             part_name = os.path.basename(part_path)
-            bot.send_audio(chat_id=message.chat.id, audio=part_file, title=f"Часть {i}/{len(audio_parts)} - {part_name}")
+            bot.send_audio(
+                chat_id=message.chat.id,
+                audio=part_file,
+                title=f"Часть {i}/{len(audio_parts)} - {part_name}",
+                reply_to_message_id=message.message_id)
 
     # Удаляем скачанное видео и аудио
     os.remove(video_path)

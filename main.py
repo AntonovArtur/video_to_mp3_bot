@@ -13,18 +13,17 @@ bot = telebot.TeleBot(token_bot.bot_token)
 # chat_id = '-1001989493249'
 @bot.message_handler(content_types=['voice'])
 def handle_voice_message(message):
-    bot.send_message(message.chat.id, "voice message")
-
-
-    # Вызываем функцию для распознавания речи из файла
-    recognized_text = speech_to_text_from_file(bot, message)
-
-    # Отправляем пользователю распознанный текст
-    bot.send_message(message.chat.id, f"Распознанный текст: {recognized_text}")
+    if auth(bot, message):
+        bot.reply_to(message, "voice message")
+        recognized_text = speech_to_text_from_file(bot, message)
+        bot.reply_to(message, f"Распознанный текст: {recognized_text}")
+    else:
+        bot.send_message(message.chat.id, "Чтобы пользоваься услугой перевода текста в текст нужно активаровать "
+                                          "аккаунт. Обратитесь в поддержку")
 
 
 def handle_message(message):
-    bot.send_message(message.chat.id, message)
+    # bot.send_message(message.chat.id, message)
     if auth(bot, message):
         video_flow(bot, message)
     else:
@@ -43,13 +42,12 @@ def start():
             # Перебираем полученные обновления
             for update in updates:
                 last_update_id = update.update_id
-                if update.message is not None:
-                    if "voice" in update.message.content_type:
-                        handle_voice_message(update.message)
-
+                if update.message is not None and "voice" in update.message.content_type:
+                    handle_voice_message(update.message)
                     continue
-                handle_message(update.message)
-                # Обновляем значение последнего обновления
+                elif update.message is not None:
+                    handle_message(update.message)
+                    # Обновляем значение последнего обновления
 
         except Exception as e:
             print(e)

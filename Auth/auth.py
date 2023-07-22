@@ -4,7 +4,7 @@ from API.user import get_user_by_telegram_id, create_user
 
 
 def auth(bot, message):
-    bot.send_message(message.chat.id, "Начался процесс авторизации(убрать текст)")
+    # bot.send_message(message.chat.id, "Начался процесс авторизации(убрать текст)")
     return bool(check_user_exist(bot, message)['isActive'])
     # if message.from_user.id == 1063715692:
     #     bot.send_message(message.chat.id, "Да здравствует мой господин!!")
