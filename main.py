@@ -3,6 +3,7 @@ import uuid
 
 import telebot
 import token_bot
+from API.user import get_all_users
 from Auth.auth import auth
 from Features.speach_to_text import speech_to_text_from_file
 from Video_Flow.video_flow import video_flow
@@ -11,12 +12,19 @@ bot = telebot.TeleBot(token_bot.bot_token)
 
 
 # chat_id = '-1001989493249'
+def search_voice_cmd(bot, message, recognized_text):
+    if recognized_text == "список участников":
+        response = get_all_users()
+        bot.reply_to(message, str(response))
+
+
 @bot.message_handler(content_types=['voice'])
 def handle_voice_message(message):
     if auth(bot, message):
         bot.reply_to(message, "voice message")
         recognized_text = speech_to_text_from_file(bot, message)
         bot.reply_to(message, f"Распознанный текст: {recognized_text}")
+        search_voice_cmd(bot, message, recognized_text)
     else:
         bot.send_message(message.chat.id, "Чтобы пользоваься услугой перевода текста в текст нужно активаровать "
                                           "аккаунт. Обратитесь в поддержку")
