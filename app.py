@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from database import execute_query, create_users_table
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:example@db:5103/postgres'
 
 
 # Маршрут для корневого URL (метод GET)

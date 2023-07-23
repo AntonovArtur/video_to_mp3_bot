@@ -51,7 +51,7 @@ def create_users_table():
             telegram_id INTEGER,
             balance DECIMAL(10, 2),
             isActive BOOLEAN,
-            
+            chat_id INTEGER DEFAULT 0
         );
         '''
         cursor.execute(query)

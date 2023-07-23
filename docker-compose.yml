@@ -4,14 +4,14 @@ services:
   db:
     image: postgres
     restart: always
-    ports:
-      - '5103:5103'
+#    ports:
+#      - '5103:5103'
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: postgres
-#    volumes:
-#      - ./data:/var/lib/postgresql/data
+    volumes:
+      - ./data:/var/lib/postgresql/data
 
   app:
     build: .
