@@ -7,6 +7,7 @@ from API.user import get_all_users
 from Auth.auth import auth
 from Features.speach_to_text import speech_to_text_from_file
 from Video_Flow.video_flow import video_flow
+from open_ai.ai_api import create_image, generate_text
 
 bot = telebot.TeleBot(token_bot.bot_token)
 
@@ -15,6 +16,12 @@ bot = telebot.TeleBot(token_bot.bot_token)
 def search_voice_cmd(bot, message, recognized_text):
     if recognized_text == "список участников":
         response = get_all_users()
+        bot.reply_to(message, str(response))
+    if recognized_text.startswith("сгенерировать картинку"):
+        response = create_image(recognized_text)
+        bot.reply_to(message, str(response))
+    if recognized_text.startswith("сгенерировать текст"):
+        response = generate_text(recognized_text)
         bot.reply_to(message, str(response))
 
 

@@ -22,9 +22,9 @@ COPY . .
 RUN apt-get update && apt-get install -y ffmpeg
 
 # Запускаем supervisord, который запустит оба приложения (app.py и main.py)
-CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+#CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 
-#CMD ["python", "app.py"]
+CMD ["python", "app.py"]
 #CMD ["python", "main.py"]
 # Запуск сервера Flask при запуске контейнера
 # CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=5000"]
