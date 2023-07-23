@@ -20,7 +20,7 @@ COPY . .
 
 # Установка ffmpeg
 RUN apt-get update
-RUN apt-get install software-properties-common
+RUN apt-get install -y software-properties-common
 RUN apt-get install -y ffmpeg
 
 # Запускаем supervisord, который запустит оба приложения (app.py и main.py)
