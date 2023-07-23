@@ -17,7 +17,8 @@ def speech_to_text_from_file(bot, message):
 
     # Создаем путь к директории "audio_files" в текущей директории
     audio_files_directory = os.path.join(current_directory, "audio_files")
-
+    if not os.path.exists(audio_files_directory):
+        os.makedirs(audio_files_directory)
     # Путь к аудиофайлу с уникальным именем
     audio_file_name = os.path.join(audio_files_directory, f"{str(uuid.uuid4())}.ogg")
     bot.send_message(message.chat.id, "test2-3")
