@@ -5,4 +5,5 @@ pytube~=15.0.0
 moviepy~=1.0.3
 requests~=2.31.0
 SpeechRecognition
-pydub
+pydub~=0.25.1
+openai
