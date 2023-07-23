@@ -26,9 +26,16 @@ def speech_to_text_from_file(bot, message):
 
     # Путь к сконвертированному аудиофайлу в формате WAV
     wav_file_name = os.path.splitext(audio_file_name)[0] + ".wav"
-    convert_ogg_to_wav(audio_file_name, wav_file_name)
+    try:
+        convert_ogg_to_wav(audio_file_name, wav_file_name)
+    except Exception as error:
+        exception_value = f'Error converting OGG to WAV: {error}'
+        bot.send_message(message.chat.id, exception_value)
+    # finally:
 
+    bot.send_message(message.chat.id, "test3")
     recognizer = sr.Recognizer()
+    print("recognizer = sr.Recognizer()")
 
     with sr.AudioFile(wav_file_name) as source:
         audio_data = recognizer.record(source)

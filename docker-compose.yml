@@ -19,6 +19,7 @@ services:
     restart: always
     ports:
       - '8009:8009'
+      - '80:80'
     depends_on:
       - db
 

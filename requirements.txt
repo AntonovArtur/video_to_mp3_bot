@@ -1,8 +1,8 @@
 Flask==2.3.2
-psycopg2-binary==2.9.6
+psycopg2-binary
 telebot~=0.0.5
 pytube~=15.0.0
 moviepy~=1.0.3
 requests~=2.31.0
 SpeechRecognition
-pydub~=0.25.1
+pydub
