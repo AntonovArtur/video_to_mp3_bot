@@ -19,13 +19,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Установка ffmpeg
-RUN apt-get update
-RUN apt-get install -y software-properties-common
-RUN apt-get install -y ffmpeg
+RUN apt-get update && apt-get install -y ffmpeg
 
 # Запускаем supervisord, который запустит оба приложения (app.py и main.py)
 CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
-
+#
 #CMD ["python", "app.py"]
 #CMD ["python", "main.py"]
 # Запуск сервера Flask при запуске контейнера
