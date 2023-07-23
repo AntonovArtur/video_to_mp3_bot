@@ -152,6 +152,27 @@ def user_activation(telegram_id):
     return jsonify({'message': 'Activation is updated successfully'})
 
 
+# Маршрут для добавления нового поля в указанную таблицу (метод PUT)
+@app.route('/add_field', methods=['PUT'])
+def add_field():
+    data = request.get_json()
+    table_name = data['table_name']
+    field_name = data['field_name']
+    field_type = data['field_type']
+    default_value = data.get('default_value', None)
+
+    # Формируем SQL-запрос для добавления поля с заданными параметрами
+    if default_value is not None:
+        query = f'ALTER TABLE {table_name} ADD COLUMN {field_name} {field_type} DEFAULT {default_value};'
+    else:
+        query = f'ALTER TABLE {table_name} ADD COLUMN {field_name} {field_type};'
+
+    if execute_query(query):
+        return jsonify({'message': f'Field {field_name} added successfully to table {table_name}'})
+    else:
+        return jsonify({'message': 'Failed to add the field'})
+
+
 if __name__ == '__main__':
     create_users_table()  # Создаем таблицу users при запуске приложения
     app.run(debug=True, host='0.0.0.0', port=8009)

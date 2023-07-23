@@ -50,7 +50,8 @@ def create_users_table():
             team_name VARCHAR(255),
             telegram_id INTEGER,
             balance DECIMAL(10, 2),
-            isActive BOOLEAN
+            isActive BOOLEAN,
+            
         );
         '''
         cursor.execute(query)
