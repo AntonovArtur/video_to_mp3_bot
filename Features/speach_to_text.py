@@ -6,7 +6,6 @@ import speech_recognition as sr
 
 
 def speech_to_text_from_file(bot, message):
-    bot.send_message(message.chat.id, "test1")
     # Генерируем уникальное имя для аудиофайла
     file_id = message.voice.file_id
     file_info = bot.get_file(file_id)
@@ -21,7 +20,6 @@ def speech_to_text_from_file(bot, message):
         os.makedirs(audio_files_directory)
     # Путь к аудиофайлу с уникальным именем
     audio_file_name = os.path.join(audio_files_directory, f"{str(uuid.uuid4())}.ogg")
-    bot.send_message(message.chat.id, "test2-3")
 
     try:
         downloaded_file = bot.download_file(file_path)
@@ -31,13 +29,11 @@ def speech_to_text_from_file(bot, message):
         # Путь к сконвертированному аудиофайлу в формате WAV
         wav_file_name = os.path.splitext(audio_file_name)[0] + ".wav"
         convert_ogg_to_wav(audio_file_name, wav_file_name)
-        bot.send_message(message.chat.id, "test3")
     except Exception as error:
         exception_value = f'Error converting OGG to WAV: {error}'
         bot.send_message(message.chat.id, exception_value)
     # finally:
 
-    bot.send_message(message.chat.id, "test4")
     recognizer = sr.Recognizer()
     print("recognizer = sr.Recognizer()")
 
