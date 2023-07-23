@@ -1,6 +1,6 @@
 import openai
 
-openai.api_key = "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"
+openai.api_key = ""
 
 
 def create_image(text):
