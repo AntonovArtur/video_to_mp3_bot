@@ -6,6 +6,7 @@ import speech_recognition as sr
 
 
 def speech_to_text_from_file(bot, message):
+    bot.send_message(message.chat.id, "test1")
     # Генерируем уникальное имя для аудиофайла
     file_id = message.voice.file_id
     file_info = bot.get_file(file_id)
