@@ -20,14 +20,15 @@ def speech_to_text_from_file(bot, message):
 
     # Путь к аудиофайлу с уникальным именем
     audio_file_name = os.path.join(audio_files_directory, f"{str(uuid.uuid4())}.ogg")
-    bot.send_message(message.chat.id, "test2")
-    downloaded_file = bot.download_file(file_path)
-    with open(audio_file_name, 'wb') as new_file:
-        new_file.write(downloaded_file)
+    bot.send_message(message.chat.id, "test2-3")
 
-    # Путь к сконвертированному аудиофайлу в формате WAV
-    wav_file_name = os.path.splitext(audio_file_name)[0] + ".wav"
     try:
+        downloaded_file = bot.download_file(file_path)
+        with open(audio_file_name, 'wb') as new_file:
+            new_file.write(downloaded_file)
+
+        # Путь к сконвертированному аудиофайлу в формате WAV
+        wav_file_name = os.path.splitext(audio_file_name)[0] + ".wav"
         convert_ogg_to_wav(audio_file_name, wav_file_name)
         bot.send_message(message.chat.id, "test3")
     except Exception as error:
