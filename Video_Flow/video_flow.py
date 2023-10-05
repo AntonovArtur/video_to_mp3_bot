@@ -19,7 +19,7 @@ def download_and_convert_mp3(bot, message):
     video_url = message.text
     yt = YouTube(video_url)
     video = yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first()
-    video_title = video.title + ".mp4"
+    video_title = "[vmp4_to_mp3_bot]" + video.title + ".mp4"
 
     try:
         # Скачиваем видео
